@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+    public const DEFAULT_PER_PAGE = 10;
+
     /**
      * The attributes that are mass assignable.
      *

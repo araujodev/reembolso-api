@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EmployeeCollection;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+    private $employeeService;
+
     /**
      * Construtor
      */
-    public function __construct()
+    public function __construct(EmployeeService $employeeService)
     {
         $this->middleware('auth:api');
+        $this->employeeService = $employeeService;
     }
 
     /**
@@ -19,9 +24,10 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        dd('Empregados');
+        $list = $this->employeeService->list($request);
+        return new EmployeeCollection($list);
     }
 
     /**

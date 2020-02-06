@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,6 +18,7 @@ class EmployeesTableSeeder extends Seeder
             'name' => 'Leandro Araujo',
             'identification' => '04155519194',
             'jobRole' => 'Developer',
+            'created_at' => Carbon::now()
         ]);
     }
 }
