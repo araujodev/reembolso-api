@@ -19,3 +19,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('refresh', 'AuthController@refresh');
     Route::get('me', 'AuthController@me');
 });
+
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::apiResource('employees', 'EmployeeController');
+});
