@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class RefundService
 {
+    private $employeeService;
+
+    public function __construct(EmployeeService $employeeService)
+    {
+        $this->employeeService = $employeeService;
+    }
 
     public function list(Request $request)
     {
@@ -29,8 +35,15 @@ class RefundService
 
     public function create(RefundStore $request)
     {
-        $employee = Refund::create($request->all());
-        if (!$employee) {
+        $requestData = $request->all();
+        $employeeIdentification = $requestData['identification'];
+        $employee = $this->employeeService->getByIdentification($employeeIdentification);
+        if (empty($employee)) {
+            $this->employeeService->create();
+        }
+
+        $refund = Refund::create($request->all());
+        if (!$refund) {
             throw new Exception('Ocorreu um erro ao criar o recurso');
         }
     }

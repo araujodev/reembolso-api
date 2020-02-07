@@ -45,8 +45,8 @@ class RefundController extends Controller
     public function store(RefundStore $request)
     {
         try {
-            $employeeCreated = $this->refundService->create($request);
-            return new RefundResource($employeeCreated);
+            $refundCreated = $this->refundService->create($request);
+            return new RefundResource($refundCreated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }
@@ -61,8 +61,8 @@ class RefundController extends Controller
     public function show($id)
     {
         try {
-            $employee = $this->refundService->get($id);
-            return new RefundResource($employee);
+            $refund = $this->refundService->get($id);
+            return new RefundResource($refund);
         } catch (ModelNotFoundException $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }
@@ -78,8 +78,8 @@ class RefundController extends Controller
     public function update(RefundUpdate $request, $id)
     {
         try {
-            $employeeUpdated = $this->refundService->update($request, $id);
-            return new RefundResource($employeeUpdated);
+            $refundUpdated = $this->refundService->update($request, $id);
+            return new RefundResource($refundUpdated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }

@@ -23,10 +23,6 @@ class RefundUpdate extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'nullable|string|max:255',
-            'identification' => 'nullable|numeric',
-            'jobRole' => 'nullable|string'
-        ];
+        return [];
     }
 }

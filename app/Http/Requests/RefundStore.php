@@ -26,7 +26,8 @@ class RefundStore extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'identification' => 'required|numeric',
-            'jobRole' => 'nullable|string'
+            'jobRole' => 'nullable|string',
+            'refunds' => 'required|array'
         ];
     }
 }

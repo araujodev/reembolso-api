@@ -27,6 +27,15 @@ class EmployeeService
         return $employee;
     }
 
+    public function getByIdentification($identification)
+    {
+        $employee = Employee::where('identification', $identification)->first();
+        if (!$employee) {
+            return null;
+        }
+        return $employee;
+    }
+
     public function create(EmployeeStore $request)
     {
         $employee = Employee::create($request->all());
