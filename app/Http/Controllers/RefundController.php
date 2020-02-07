@@ -45,7 +45,7 @@ class RefundController extends Controller
     public function store(RefundStore $request)
     {
         try {
-            $refundCreated = $this->refundService->create($request);
+            $refundCreated = $this->refundService->create($request->all());
             return new RefundResource($refundCreated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);

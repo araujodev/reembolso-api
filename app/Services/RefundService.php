@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\RefundStore;
 use App\Http\Requests\RefundUpdate;
 use App\Models\Refund;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -33,19 +34,26 @@ class RefundService
         return $employee;
     }
 
-    public function create(RefundStore $request)
+    public function create(array $data)
     {
-        $requestData = $request->all();
-        $employeeIdentification = $requestData['identification'];
+        $employeeIdentification = $data['identification'];
         $employee = $this->employeeService->getByIdentification($employeeIdentification);
         if (empty($employee)) {
-            $this->employeeService->create();
+            $employee = $this->employeeService->create($data);
         }
 
-        $refund = Refund::create($request->all());
-        if (!$refund) {
-            throw new Exception('Ocorreu um erro ao criar o recurso');
-        }
+        $refundsToInsert = $this->prepareRefundsWithEmployee($data['refunds'], $employee);
+
+        $insertedRefunds = $refundsToInsert->map(function ($refund) {
+            $refundCreated = Refund::create($refund);
+            return $refundCreated;
+        });
+
+        dd($insertedRefunds);
+
+        //if (!$refund) {
+        //    throw new Exception('Ocorreu um erro ao criar o recurso');
+        // }
     }
 
     public function update(RefundUpdate $request, $id)
@@ -72,5 +80,16 @@ class RefundService
             }
         }
         return "Reembolso removido com sucesso.";
+    }
+
+    private function prepareRefundsWithEmployee(array $refunds, $employee)
+    {
+        $refundsCollection = collect($refunds);
+        $refundsCollection->transform(function ($refund) use ($employee) {
+            $refund['date'] = Carbon::parse($refund['date']);
+            $refund['employee_id'] = $employee->id;
+            return $refund;
+        });
+        return $refundsCollection;
     }
 }

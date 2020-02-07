@@ -45,7 +45,7 @@ class EmployeeController extends Controller
     public function store(EmployeeStore $request)
     {
         try {
-            $employeeCreated = $this->employeeService->create($request);
+            $employeeCreated = $this->employeeService->create($request->all());
             return new EmployeeResource($employeeCreated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
@@ -78,7 +78,7 @@ class EmployeeController extends Controller
     public function update(EmployeeUpdate $request, $id)
     {
         try {
-            $employeeUpdated = $this->employeeService->update($request, $id);
+            $employeeUpdated = $this->employeeService->update($request->all(), $id);
             return new EmployeeResource($employeeUpdated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);

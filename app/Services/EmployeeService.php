@@ -30,26 +30,27 @@ class EmployeeService
     public function getByIdentification($identification)
     {
         $employee = Employee::where('identification', $identification)->first();
-        if (!$employee) {
+        if (empty($employee)) {
             return null;
         }
         return $employee;
     }
 
-    public function create(EmployeeStore $request)
+    public function create(array $data)
     {
-        $employee = Employee::create($request->all());
+        $employee = Employee::create($data);
         if (!$employee) {
             throw new Exception('Ocorreu um erro ao criar o recurso');
         }
+        return $employee;
     }
 
-    public function update(EmployeeUpdate $request, $id)
+    public function update(array $data, $id)
     {
         $employee = $this->get($id);
 
         if (!empty($employee)) {
-            $update = $employee->update($request->all());
+            $update = $employee->update($data);
             if (!$update) {
                 throw new Exception('Ocorreu um erro ao atualizar o recurso');
             }
