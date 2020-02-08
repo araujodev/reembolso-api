@@ -26,7 +26,8 @@ class Refund extends Model
         'description',
         'value',
         'employee_id',
-        'status'
+        'status',
+        'receipt'
     ];
 
     /**

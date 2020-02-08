@@ -20,9 +20,10 @@ class RefundResource extends JsonResource
             'status' => $this->status,
             'description' => $this->description,
             'value' => $this->value,
+            'receipt' => $this->receipt,
             'employee_id' => $this->employee_id,
             'employee' => $this->employee,
-            'createdAt' => $this->created_at
+            'createdAt' => $this->created_at,
         ];
     }
 }

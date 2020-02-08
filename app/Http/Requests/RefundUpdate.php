@@ -25,7 +25,8 @@ class RefundUpdate extends FormRequest
     {
         return [
             'value' => 'nullable|numeric',
-            'status' => 'nullable|numeric'
+            'status' => 'nullable|numeric',
+            'receipt' => 'nullable|string'
         ];
     }
 }

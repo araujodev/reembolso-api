@@ -138,6 +138,9 @@ class RefundController extends Controller
         }
     }
 
+    /**
+     * Make a report to employee
+     */
     public function report(Request $request, $employee_id)
     {
         try {
@@ -145,6 +148,24 @@ class RefundController extends Controller
             return response()->json(['report' => $report]);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 200);
+        }
+    }
+
+    /**
+     * Approve an refund
+     *
+     * @param RefundUpdate $request
+     * @param int $employee_id
+     * @param int $refund_id
+     * @return
+     */
+    public function receipt(RefundUpdate $request, $employee_id, $refund_id)
+    {
+        try {
+            $refundApproved = $this->refundService->receipt($request->only('receipt'), $refund_id, $employee_id);
+            return new RefundResource($refundApproved);
+        } catch (Exception $ex) {
+            return response()->json(['mensagem' => $ex->getMessage()], 400);
         }
     }
 }

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use stdClass;
 
 class RefundService
@@ -232,5 +233,44 @@ class RefundService
         $report->refunds = $refundsCount;
 
         return $report;
+    }
+
+    /**
+     * Atribui um comprovante a um reembolso
+     *
+     * @param array $request
+     * @param int $refund_id
+     * @param int $employee_id
+     * @return mixed
+     */
+    public function receipt(array $request, $refund_id, $employee_id)
+    {
+        $refund = $this->get($refund_id, $employee_id);
+
+        if (
+            ($refund->status == Refund::STATUS_APPROVED) ||
+            ($refund->status == Refund::STATUS_CANCELED)
+        ) {
+            throw new Exception('Alteracao de dados do reembolso nao permitida');
+        }
+
+        if (!empty($refund->receipt)) {
+            throw new Exception('Ja existe um comprovante para este reembolso');
+        }
+
+        $image = $request['receipt'];
+        $image = str_replace('data:image/png;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+        $imageName = str_random(10) . '.' . 'png';
+        \File::put(storage_path() . '/app/public/' . $imageName, base64_decode($image));
+        $fullBase = url('/storage/' . $imageName);
+
+        if (!empty($refund)) {
+            $update = $refund->update(['receipt' => $fullBase]);
+            if (!$update) {
+                throw new Exception('Ocorreu um erro ao fazer upload do comprovante');
+            }
+        }
+        return $refund;
     }
 }
