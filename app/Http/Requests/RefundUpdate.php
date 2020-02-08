@@ -23,6 +23,8 @@ class RefundUpdate extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+            'value' => 'required|numeric'
+        ];
     }
 }

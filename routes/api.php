@@ -21,6 +21,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 });
 
 Route::group(['middleware' => 'api'], function ($router) {
+    Route::get('/refunds', 'RefundController@all');
     Route::get('/employees/{employee_id}/refunds', 'RefundController@index');
     Route::post('/employees/{employee_id}/refunds', 'RefundController@store');
     Route::put('/employees/{employee_id}/refunds/{refund_id}', 'RefundController@update');

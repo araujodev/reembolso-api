@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Refund extends Model
 {
+    use SoftDeletes;
+
     public const DEFAULT_TYPE = "TICKET";
     public const DEFAULT_PER_PAGE = 10;
 
@@ -21,4 +24,12 @@ class Refund extends Model
         'value',
         'employee_id'
     ];
+
+    /**
+     * Employee Relationship
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }

@@ -29,7 +29,7 @@ class RefundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function all(Request $request)
     {
         try {
             $list = $this->refundService->list($request);
@@ -40,13 +40,28 @@ class RefundController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function store(RefundStore $request)
+    public function index(Request $request, $employee_id)
     {
         try {
-            $refundCreated = $this->refundService->create($request->all());
-            return new RefundResource($refundCreated);
+            $list = $this->refundService->list($request, $employee_id);
+            return new RefundCollection($list);
+        } catch (Exception $ex) {
+            return response()->json(['mensagem' => 'Ocorreu um erro ao recuperar a lista'], 400);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(RefundStore $request, $employee_id)
+    {
+        try {
+            $refundList = $this->refundService->create($request->all(), $employee_id);
+            return new RefundCollection($refundList);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }
@@ -58,10 +73,10 @@ class RefundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($employee_id, $refund_id)
     {
         try {
-            $refund = $this->refundService->get($id);
+            $refund = $this->refundService->get($refund_id, $employee_id);
             return new RefundResource($refund);
         } catch (ModelNotFoundException $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
@@ -72,13 +87,14 @@ class RefundController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $refund_id
+     * @param  int  $employee_id
      * @return \Illuminate\Http\Response
      */
-    public function update(RefundUpdate $request, $id)
+    public function update(RefundUpdate $request, $employee_id, $refund_id)
     {
         try {
-            $refundUpdated = $this->refundService->update($request, $id);
+            $refundUpdated = $this->refundService->update($request->only('value'), $refund_id, $employee_id);
             return new RefundResource($refundUpdated);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
@@ -86,15 +102,15 @@ class RefundController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource, but put in softdelete.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($employee_id, $refund_id)
     {
         try {
-            $deleted = $this->refundService->delete($id);
+            $deleted = $this->refundService->delete($refund_id, $employee_id);
             return response()->json(['mensagem' => $deleted], 200);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);

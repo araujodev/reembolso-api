@@ -18,7 +18,10 @@ class RefundResource extends JsonResource
             'date' => $this->date,
             'type' => $this->type,
             'description' => $this->description,
-            'value' => $this->value
+            'value' => $this->value,
+            'employee_id' => $this->employee_id,
+            'employee' => $this->employee,
+            'createdAt' => $this->created_at
         ];
     }
 }

@@ -24,9 +24,6 @@ class RefundStore extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'identification' => 'required|numeric',
-            'jobRole' => 'nullable|string',
             'refunds' => 'required|array'
         ];
     }

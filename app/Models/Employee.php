@@ -18,4 +18,12 @@ class Employee extends Model
         'identification',
         'jobRole'
     ];
+
+    /**
+     * Refunds Relationship
+     */
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
 }
