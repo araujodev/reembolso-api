@@ -82,6 +82,16 @@ class RefundService
         $refundsToInsert = $this->prepareRefundsWithEmployee($refundsCollection, $employee);
 
         $insertedRefunds = $refundsToInsert->map(function ($refund) {
+            if (!empty($refund['receipt'])) {
+                $image = $refund['receipt'];
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = str_random(10) . '.' . 'png';
+                \File::put(storage_path() . '/app/public/' . $imageName, base64_decode($image));
+                $fullBase = url('/storage/' . $imageName);
+                $refund['receipt'] = $fullBase;
+            }
+
             $refundCreated = Refund::create($refund);
             return $refundCreated;
         });
