@@ -17,6 +17,7 @@ class RefundResource extends JsonResource
             'id' => $this->id,
             'date' => $this->date,
             'type' => $this->type,
+            'status' => $this->status,
             'description' => $this->description,
             'value' => $this->value,
             'employee_id' => $this->employee_id,

@@ -11,6 +11,9 @@ class Refund extends Model
 
     public const DEFAULT_TYPE = "TICKET";
     public const DEFAULT_PER_PAGE = 10;
+    public const STATUS_OPENED = 1;
+    public const STATUS_APPROVED = 2;
+    public const STATUS_CANCELED = 0;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +25,8 @@ class Refund extends Model
         'type',
         'description',
         'value',
-        'employee_id'
+        'employee_id',
+        'status'
     ];
 
     /**

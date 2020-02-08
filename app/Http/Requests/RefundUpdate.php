@@ -24,7 +24,8 @@ class RefundUpdate extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required|numeric'
+            'value' => 'nullable|numeric',
+            'status' => 'nullable|numeric'
         ];
     }
 }

@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 
 class RefundController extends Controller
 {
+    /**
+     * @var RefundService $refundService
+     */
     private $refundService;
 
     /**
@@ -112,6 +115,24 @@ class RefundController extends Controller
         try {
             $deleted = $this->refundService->delete($refund_id, $employee_id);
             return response()->json(['mensagem' => $deleted], 200);
+        } catch (Exception $ex) {
+            return response()->json(['mensagem' => $ex->getMessage()], 400);
+        }
+    }
+
+    /**
+     * Approve an refund
+     *
+     * @param RefundUpdate $request
+     * @param int $employee_id
+     * @param int $refund_id
+     * @return
+     */
+    public function approve(RefundUpdate $request, $employee_id, $refund_id)
+    {
+        try {
+            $refundApproved = $this->refundService->approve($request->only('status'), $refund_id, $employee_id);
+            return new RefundResource($refundApproved);
         } catch (Exception $ex) {
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }

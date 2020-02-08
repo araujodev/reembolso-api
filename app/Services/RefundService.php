@@ -14,7 +14,7 @@ class RefundService
     /**
      * Employee private variable
      *
-     * @var EmployeeService
+     * @var EmployeeService $employeeService
      */
     private $employeeService;
 
@@ -30,6 +30,7 @@ class RefundService
      * Recupera uma lista paginada dos reembolsos.
      *
      * @param Request $request
+     * @param int $employee_id
      * @return Collection
      */
     public function list(Request $request, $employee_id = null)
@@ -45,9 +46,9 @@ class RefundService
     /**
      * Recupera um Reembolso
      *
-     * @param $refund_id
-     * @param $employee_id
-     * @return void
+     * @param int $refund_id
+     * @param int $employee_id
+     * @return Refund
      */
     public function get($refund_id, $employee_id = null)
     {
@@ -70,6 +71,7 @@ class RefundService
      * Metodo responsavel por criar um ou mais refunds.
      *
      * @param array $data
+     * @param int $employee_id
      * @return Collection
      */
     public function create(array $data, $employee_id)
@@ -96,14 +98,23 @@ class RefundService
      * @param array $request
      * @param int $refund_id
      * @param int $employee_id
-     * @return void
+     * @return Refund
      */
     public function update(array $request, $refund_id, $employee_id)
     {
         $refund = $this->get($refund_id, $employee_id);
 
         if (!empty($refund)) {
+
+            if (
+                ($refund->status == Refund::STATUS_APPROVED) ||
+                ($refund->status == Refund::STATUS_CANCELED)
+            ) {
+                throw new Exception('Este reembolso nao pode ser atualizado pois ja esta aprovado ou fechado.');
+            }
+
             $update = $refund->update($request);
+
             if (!$update) {
                 throw new Exception('Ocorreu um erro ao atualizar o recurso');
             }
@@ -129,6 +140,31 @@ class RefundService
             }
         }
         return "Reembolso removido com sucesso.";
+    }
+
+    /**
+     * Aprova um Reembolso
+     *
+     * @param array $status
+     * @param int $refund_id
+     * @param int $employee_id
+     * @return Refund
+     */
+    public function approve(array $request, $refund_id, $employee_id)
+    {
+        $refund = $this->get($refund_id, $employee_id);
+
+        if ($request['status'] != Refund::STATUS_APPROVED) {
+            throw new Exception('Alteracao de status do reembolso nao permitida.');
+        }
+
+        if (!empty($refund)) {
+            $update = $refund->update($request);
+            if (!$update) {
+                throw new Exception('Ocorreu um erro ao aprovar o reembolso');
+            }
+        }
+        return $refund;
     }
 
     /**
