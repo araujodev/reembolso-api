@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Refund;
+use App\Services\RefundService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
+    private $refundService;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(RefundService $refundService)
     {
         $this->middleware('auth');
+        $this->refundService = $refundService;
     }
 
     /**
@@ -23,6 +29,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $refunds = Refund::all();
+        return view('home', compact('refunds'));
+    }
+
+    public function change_status(Request $request)
+    {
+        dd($request->all());
     }
 }

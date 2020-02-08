@@ -283,4 +283,21 @@ class RefundService
         }
         return $refund;
     }
+
+    public function change(array $refund_id, $status)
+    {
+        $refund = $this->get($refund_id);
+
+        if ($status != Refund::STATUS_CANCELED {
+            throw new Exception('Alteracao de status do reembolso nao permitida.');
+        }
+
+        if (!empty($refund)) {
+            $update = $refund->update($request);
+            if (!$update) {
+                throw new Exception('Ocorreu um erro ao aprovar o reembolso');
+            }
+        }
+        return $refund;
+    }
 }
