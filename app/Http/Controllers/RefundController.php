@@ -137,4 +137,14 @@ class RefundController extends Controller
             return response()->json(['mensagem' => $ex->getMessage()], 400);
         }
     }
+
+    public function report(Request $request, $employee_id)
+    {
+        try {
+            $report = $this->refundService->reportByEmployee($request->only(['month', 'year']), $employee_id);
+            return response()->json(['report' => $report]);
+        } catch (Exception $ex) {
+            return response()->json(['mensagem' => $ex->getMessage()], 200);
+        }
+    }
 }

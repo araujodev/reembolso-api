@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Http\Requests\RefundUpdate;
 use App\Models\Refund;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use stdClass;
 
 class RefundService
 {
@@ -168,6 +168,31 @@ class RefundService
     }
 
     /**
+     * Gera um relatorio dos reembolsos de um Funcionario
+     *
+     * @param array $request
+     * @param int $employee_id
+     * @return mixed
+     */
+    public function reportByEmployee(array $request, $employee_id)
+    {
+        $month = $request['month'];
+        $year = $request['year'];
+
+        $dataset = Refund::where('employee_id', $employee_id)
+            ->whereMonth('date', '=', $month)
+            ->whereYear('date', '=', $year)
+            ->get();
+
+        if ($dataset->count() == 0) {
+            throw new Exception('Nenhum resultado encontrado para o periodo selecionado');
+        }
+
+        $report = $this->makeReportByEmployee($dataset, $month, $year);
+        return $report;
+    }
+
+    /**
      * Metodo Responsavel por receber uma collection de Refunds,
      * modificar ela colocando o ID do Employee bem como a formatacao
      * do campo Date para ser inserido no banco de dados.
@@ -184,5 +209,28 @@ class RefundService
             return $refund;
         });
         return $refundsCollection;
+    }
+
+    /**
+     * Monta o relatorio de Reeembolsos por Funcionario
+     *
+     * @param Collection $refunds
+     * @param int $month
+     * @param int $year
+     * @return stdClass
+     */
+    private function makeReportByEmployee($refunds, $month, $year)
+    {
+        $refundsCount = $refunds->count();
+        $sumRefunds = 0;
+        $totalRefunds = $refunds->sum('value');
+
+        $report = new stdClass();
+        $report->month = $month;
+        $report->year = $year;
+        $report->totalRefunds = number_format($totalRefunds, 2, ',', '.');
+        $report->refunds = $refundsCount;
+
+        return $report;
     }
 }
