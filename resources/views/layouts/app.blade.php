@@ -73,6 +73,20 @@
         </nav>
 
         <main class="py-4">
+            @if (\Session::has('success'))
+                <div class="col-12">
+                    <div class="alert alert-success text-center">
+                        {!! \Session::get('success') !!}
+                    </div>
+                </div>
+            @endif
+            @if (\Session::has('errors'))
+                <div class="col-12">
+                    <div class="alert alert-danger text-center">
+                        {!! \Session::get('errors') !!}
+                    </div>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>

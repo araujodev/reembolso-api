@@ -18,4 +18,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/refunds/change_status', 'HomeController@change_status')->name('change_status');
+Route::get('/refunds/change_status/{refund_id}/{status}', 'HomeController@change_status')->name('change_status');
+Route::delete('/refunds/remove/{refund_id}', 'HomeController@remove')->name('remove');

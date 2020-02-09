@@ -30,6 +30,26 @@ class Refund extends Model
         'receipt'
     ];
 
+    protected $appends = [
+        'status_label'
+    ];
+
+    /**
+     * Define Status Label
+     *
+     * @return string
+     */
+    public function getStatusLabelAttribute()
+    {
+        if ($this->attributes['status'] == Refund::STATUS_APPROVED) {
+            return "Aprovado";
+        } else if ($this->attributes['status'] == Refund::STATUS_CANCELED) {
+            return "Cancelado";
+        } else {
+            return "Em Aberto";
+        }
+    }
+
     /**
      * Employee Relationship
      */

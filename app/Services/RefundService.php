@@ -82,14 +82,10 @@ class RefundService
         $refundsToInsert = $this->prepareRefundsWithEmployee($refundsCollection, $employee);
 
         $insertedRefunds = $refundsToInsert->map(function ($refund) {
+
             if (!empty($refund['receipt'])) {
-                $image = $refund['receipt'];
-                $image = str_replace('data:image/png;base64,', '', $image);
-                $image = str_replace(' ', '+', $image);
-                $imageName = str_random(10) . '.' . 'png';
-                \File::put(storage_path() . '/app/public/' . $imageName, base64_decode($image));
-                $fullBase = url('/storage/' . $imageName);
-                $refund['receipt'] = $fullBase;
+                $fullPathReceipt = $this->uploadReceipt($refund['receipt']);
+                $refund['receipt'] = $fullPathReceipt;
             }
 
             $refundCreated = Refund::create($refund);
@@ -204,6 +200,71 @@ class RefundService
     }
 
     /**
+     * Atribui um comprovante a um reembolso
+     *
+     * @param array $request
+     * @param int $refund_id
+     * @param int $employee_id
+     * @return mixed
+     */
+    public function receipt(array $request, $refund_id, $employee_id)
+    {
+        $refund = $this->get($refund_id, $employee_id);
+
+        if (
+            ($refund->status == Refund::STATUS_APPROVED) ||
+            ($refund->status == Refund::STATUS_CANCELED)
+        ) {
+            throw new Exception('Alteracao de dados do reembolso nao permitida');
+        }
+
+        if (!empty($refund->receipt)) {
+            throw new Exception('Ja existe um comprovante para este reembolso');
+        }
+
+        $fullPathReceipt = $this->uploadReceipt($request['receipt']);
+
+        if (!empty($refund)) {
+            $update = $refund->update(['receipt' => $fullPathReceipt]);
+            if (!$update) {
+                throw new Exception('Ocorreu um erro ao fazer upload do comprovante');
+            }
+        }
+        return $refund;
+    }
+
+    /**
+     * Altera o status de um reembolso (Painel web)
+     *
+     * @param int $refund_id
+     * @param int $status
+     * @return boolean
+     */
+    public function change($refund_id, $status)
+    {
+        $refund = $this->get($refund_id);
+
+        $allowedStatus = [
+            Refund::STATUS_APPROVED,
+            Refund::STATUS_OPENED,
+            Refund::STATUS_CANCELED
+        ];
+
+        if (!in_array($status, $allowedStatus)) {
+            throw new Exception('Alteracao de status do reembolso nao permitida.');
+        }
+
+        if (!empty($refund)) {
+            $update = $refund->update(['status' => $status]);
+            if (!$update) {
+                throw new Exception('Ocorreu um erro ao alterar status do reembolso');
+            }
+            return $update;
+        }
+        return false;
+    }
+
+    /**
      * Metodo Responsavel por receber uma collection de Refunds,
      * modificar ela colocando o ID do Employee bem como a formatacao
      * do campo Date para ser inserido no banco de dados.
@@ -246,58 +307,19 @@ class RefundService
     }
 
     /**
-     * Atribui um comprovante a um reembolso
+     * Realiza o upload PNG do Recibo do Reembolso (em Base64)
      *
-     * @param array $request
-     * @param int $refund_id
-     * @param int $employee_id
-     * @return mixed
+     * @param string $receipt
+     * @return string
      */
-    public function receipt(array $request, $refund_id, $employee_id)
+    private function uploadReceipt($receipt)
     {
-        $refund = $this->get($refund_id, $employee_id);
-
-        if (
-            ($refund->status == Refund::STATUS_APPROVED) ||
-            ($refund->status == Refund::STATUS_CANCELED)
-        ) {
-            throw new Exception('Alteracao de dados do reembolso nao permitida');
-        }
-
-        if (!empty($refund->receipt)) {
-            throw new Exception('Ja existe um comprovante para este reembolso');
-        }
-
-        $image = $request['receipt'];
+        $image = $receipt;
         $image = str_replace('data:image/png;base64,', '', $image);
         $image = str_replace(' ', '+', $image);
         $imageName = str_random(10) . '.' . 'png';
         \File::put(storage_path() . '/app/public/' . $imageName, base64_decode($image));
         $fullBase = url('/storage/' . $imageName);
-
-        if (!empty($refund)) {
-            $update = $refund->update(['receipt' => $fullBase]);
-            if (!$update) {
-                throw new Exception('Ocorreu um erro ao fazer upload do comprovante');
-            }
-        }
-        return $refund;
-    }
-
-    public function change(array $refund_id, $status)
-    {
-        $refund = $this->get($refund_id);
-
-        if ($status != Refund::STATUS_CANCELED {
-            throw new Exception('Alteracao de status do reembolso nao permitida.');
-        }
-
-        if (!empty($refund)) {
-            $update = $refund->update($request);
-            if (!$update) {
-                throw new Exception('Ocorreu um erro ao aprovar o reembolso');
-            }
-        }
-        return $refund;
+        return $fullBase;
     }
 }
