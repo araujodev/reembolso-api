@@ -2,31 +2,31 @@
 
 ## Reembolso Application
 
-Aplicacao de Reembolso que inclui uma API para integracao bem como uma parte WEB para gerir os status, remocao, comprovantes dos reembolsos.
+Aplicação de Reembolso que inclui uma API para integração e também uma parte WEB para gerir os status, remoção, comprovantes dos reembolsos.
 
-## Documentacao da API
+## Documentação da API
 
-A API foi construida com base nos padroes Rest e sua documentacao está disponivel na [Documentacao do Postman](https://documenter.getpostman.com/view/6630459/SWTG7ben?version=latest)
+A API foi construida com base nos padrões Rest e sua documentação está disponivel na [Documentação do Postman](https://documenter.getpostman.com/view/6630459/SWTG7ben?version=latest)
 
-## Modulos da API
+## Módulos da API
 
-Foi criado basicamente dois modulo. Um dos modulos denominado `Employee` fica responsavel por gerenciar os funcionarios que possuem reembolsos. Já o outro modulo denominado `Refund` fica responsavel por armazenar os reembolsos de um determinado funcionario.
+Foram criados basicamente dois módulos. Um dos módulos denominado `Employee` fica responsável por gerenciar os funcionarios que possuem reembolsos. Já o outro módulo denominado `Refund` fica responsável por armazenar os reembolsos de um determinado funcionário.
 
-## Autenticacao
+## Autenticação
 
-Tanto a API quanto o painel WEB implementam autenticacao. A API implementa a autenticacao JWT onde possui um endpoint para realizar o login e retornar o token de acesso.
+Tanto a API quanto o painel WEB implementam autenticação. A API implementa a autenticação JWT onde possui um endpoint para realizar o login e retornar o token de acesso.
 
-Para criar um novo usuario, a principio sera necessario rodar uma seeder presente na aplicacao. Esta seeder ira gerar um usuario ficticio para autenticacao tanto web quanto via api.
+Para criar um novo usuário, será necessário rodar um seeder presente na aplicação. Esta seeder irá gerar um usuário de exemplo para autenticação tanto web quanto via api.
 
-## Estruturacao Adicional
+## Estruturação Adicional
 
-O projeto foi inicialmente projetado para ter somente a parte da api rest porem com o decorrer foi feito o painel administrativo para listar os reembolsos, alterar seus status, remove-los e mostrar o comprovante anexado.
+O projeto foi inicialmente projetado para ter somente a parte da api rest porém com o decorrer do desenvolvimento foi feito um painel administrativo para gerir os reembolsos.
 
-Para isso o projeto em MVC implementa uma camada adicional de `Service` para comportar melhor as regras da aplicacao.
+Para isso o projeto em MVC implementa uma camada adicional de `Service` para comportar melhor as regras da aplicação.
 
-## Instalacao
+## Instalação
 
-Para rodar a aplicacao com todos os recursos e funcionalidades garantidas, recomendo os seguintes passos:
+Para rodar a aplicação com todos os recursos e funcionalidades garantidas, recomendo os seguintes passos:
 
 1. Clonar este projeto com  
    `git clone https://github.com/araujodev/reembolso-api.git`
@@ -35,13 +35,13 @@ Para rodar a aplicacao com todos os recursos e funcionalidades garantidas, recom
 
 3. A partir do `.env.example` criar um novo arquivo chamado `.env`
 
-4. Gerar a Key da aplicacao com o comando `php artisan key:generate` e logo em seguida gerar a key do jwt com o comando `php artisan jwt:secret`
+4. Gerar a Key da aplicação com o comando `php artisan key:generate` e logo em seguida gerar a key do jwt com o comando `php artisan jwt:secret`
 
 5. Atualizar os dados do banco de dados no arquivo `.env` e executar o migrate com `php artisan migrate`
 
-6. Executar o Seeder para criar um usuario de exemplo e um funcionario com o comando `php artisan db:seed`
+6. Executar o Seeder para criar um usuário de exemplo e um funcionário com o comando `php artisan db:seed`
 
-7. Utilizar os endpoints da api e a parte web para gerenciar a aplicacao. Para servir a aplicacao execute `php artisan serve`
+7. Utilizar os endpoints da api e a parte web para gerenciar a aplicação. Para servir a aplicação execute `php artisan serve`
 
 ## Recursos Utilizados
 
@@ -53,6 +53,8 @@ Abaixo deixo a lista dos recursos utilizados:
 
 ## Conclusao
 
-Desde ja agradeço a oportunidade do desafio.
+Desde já agradeço a oportunidade de realizar o desafio.
 
 Att Leandro Souza Araujo.
+
+leandro.souara.web@gmail.com
