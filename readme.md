@@ -1,72 +1,58 @@
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Reembolso Application
 
-## About Laravel
+Aplicacao de Reembolso que inclui uma API para integracao bem como uma parte WEB para gerir os status, remocao, comprovantes dos reembolsos.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Documentacao da API
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+A API foi construida com base nos padroes Rest e sua documentacao está disponivel na [Documentacao do Postman](https://documenter.getpostman.com/view/6630459/SWTG7ben?version=latest)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Modulos da API
 
-## Learning Laravel
+Foi criado basicamente dois modulo. Um dos modulos denominado `Employee` fica responsavel por gerenciar os funcionarios que possuem reembolsos. Já o outro modulo denominado `Refund` fica responsavel por armazenar os reembolsos de um determinado funcionario.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Autenticacao
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Tanto a API quanto o painel WEB implementam autenticacao. A API implementa a autenticacao JWT onde possui um endpoint para realizar o login e retornar o token de acesso.
 
-## Laravel Sponsors
+Para criar um novo usuario, a principio sera necessario rodar uma seeder presente na aplicacao. Esta seeder ira gerar um usuario ficticio para autenticacao tanto web quanto via api.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Estruturacao Adicional
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+O projeto foi inicialmente projetado para ter somente a parte da api rest porem com o decorrer foi feito o painel administrativo para listar os reembolsos, alterar seus status, remove-los e mostrar o comprovante anexado.
 
-## Contributing
+Para isso o projeto em MVC implementa uma camada adicional de `Service` para comportar melhor as regras da aplicacao.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instalacao
 
-## Security Vulnerabilities
+Para rodar a aplicacao com todos os recursos e funcionalidades garantidas, recomendo os seguintes passos:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Clonar este projeto com  
+   `git clone https://github.com/araujodev/reembolso-api.git`
 
-## License
+2. Dentro da pasta clonada executar o `composer install`
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. A partir do `.env.example` criar um novo arquivo chamado `.env`
+
+4. Gerar a Key da aplicacao com o comando `php artisan key:generate` e logo em seguida gerar a key do jwt com o comando `php artisan jwt:secret`
+
+5. Atualizar os dados do banco de dados no arquivo `.env` e executar o migrate com `php artisan migrate`
+
+6. Executar o Seeder para criar um usuario de exemplo e um funcionario com o comando `php artisan db:seed`
+
+7. Utilizar os endpoints da api e a parte web para gerenciar a aplicacao. Para servir a aplicacao execute `php artisan serve`
+
+## Recursos Utilizados
+
+Abaixo deixo a lista dos recursos utilizados:
+
+-   tymon/jwt-auth
+-   nesbot/carbon
+-   maatwebsite/excel
+
+## Conclusao
+
+Desde ja agradeço a oportunidade do desafio.
+
+Att Leandro Souza Araujo.
