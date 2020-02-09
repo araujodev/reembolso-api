@@ -13,7 +13,7 @@
                     </div>
                     <table class="table table-hover">
                         <tr>
-                            <td>ID</td>
+                            <td>Image</td>
                             <td>Status</td>
                             <td>Employee</td>
                             <td>Date</td>
@@ -24,7 +24,7 @@
                         </tr>
                         @foreach ($refunds as $refund)
                         <tr>
-                            <td>{{$refund->id}}</td>
+                            <td><?= !empty($refund->receipt) ? "<a target='_blank' href='$refund->receipt'>Show</a>": "-" ?></td>
                             <td>{{$refund->status_label}}</td>
                             <td>{{$refund->employee->name}}</td>
                             <td>{{$refund->date}}</td>
