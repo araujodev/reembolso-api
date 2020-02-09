@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +20,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::group(['middleware' => 'api'], function ($router) {
     Route::get('/refunds', 'RefundController@all');
+
+    Route::post('/employees/{employee_id}/refunds/report-csv', 'RefundController@report_csv');
     Route::post('/employees/{employee_id}/refunds/report', 'RefundController@report');
     Route::get('/employees/{employee_id}/refunds', 'RefundController@index');
     Route::post('/employees/{employee_id}/refunds/{refund_id}/approve', 'RefundController@approve');

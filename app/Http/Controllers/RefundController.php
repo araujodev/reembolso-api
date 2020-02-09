@@ -152,6 +152,23 @@ class RefundController extends Controller
     }
 
     /**
+     * Make a csv report to employee
+     *
+     * @param Request $request
+     * @param int $employee_id
+     * @return Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function report_csv(Request $request, $employee_id)
+    {
+        try {
+            $report = $this->refundService->reportByEmployeeCSV($request->only(['month', 'year']), $employee_id);
+            return $report;
+        } catch (Exception $ex) {
+            return response()->json(['mensagem' => $ex->getMessage()], 200);
+        }
+    }
+
+    /**
      * Approve an refund
      *
      * @param RefundUpdate $request

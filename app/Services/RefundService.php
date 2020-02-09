@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Exports\RefundsReportExport;
 use App\Models\Refund;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
 
 class RefundService
@@ -197,6 +199,24 @@ class RefundService
 
         $report = $this->makeReportByEmployee($dataset, $month, $year);
         return $report;
+    }
+
+    /**
+     * Gera um relatorio em formato CSV dos reembolsos de um funcionario
+     *
+     * @param array $request
+     * @param int $employee_id
+     * @return Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function reportByEmployeeCSV(array $request, $employee_id)
+    {
+        $month = $request['month'];
+        $year = $request['year'];
+
+        return Excel::download(
+            new RefundsReportExport($month, $year, $employee_id),
+            'report.csv'
+        );
     }
 
     /**
