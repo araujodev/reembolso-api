@@ -1,4 +1,4 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+<p align="center"><img src="https://imgbbb.com/images/2020/02/09/Captura-de-Tela-2020-02-09-as-12.51.08.png" width="800"></p>
 
 ## Reembolso Application
 
