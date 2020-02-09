@@ -298,6 +298,7 @@ class RefundService
         $refundsCollection->transform(function ($refund) use ($employee) {
             $refund['date'] = Carbon::parse($refund['date']);
             $refund['employee_id'] = $employee->id;
+            $refund['status'] = Refund::STATUS_OPENED;
             return $refund;
         });
         return $refundsCollection;

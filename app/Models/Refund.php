@@ -41,12 +41,14 @@ class Refund extends Model
      */
     public function getStatusLabelAttribute()
     {
-        if ($this->attributes['status'] == Refund::STATUS_APPROVED) {
-            return "Aprovado";
-        } else if ($this->attributes['status'] == Refund::STATUS_CANCELED) {
-            return "Cancelado";
-        } else {
-            return "Em Aberto";
+        if (isset($this->attributes['status'])) {
+            if ($this->attributes['status'] == Refund::STATUS_APPROVED) {
+                return "Aprovado";
+            } else if ($this->attributes['status'] == Refund::STATUS_CANCELED) {
+                return "Cancelado";
+            } else {
+                return "Em Aberto";
+            }
         }
     }
 
