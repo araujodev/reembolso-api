@@ -53,8 +53,6 @@ Abaixo deixo a lista dos recursos utilizados:
 
 ## Conclusao
 
-Desde já agradeço a oportunidade de realizar o desafio.
-
 Att Leandro Souza Araujo.
 
 leandro.souara.web@gmail.com
